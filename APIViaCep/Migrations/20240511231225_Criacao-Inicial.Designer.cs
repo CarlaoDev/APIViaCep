@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace APIViaCep.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20240511225015_Criacao-Inicial2")]
-    partial class CriacaoInicial2
+    [Migration("20240511231225_Criacao-Inicial")]
+    partial class CriacaoInicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
