@@ -1,5 +1,6 @@
 ﻿using APIViaCep.Models;
 using Microsoft.AspNetCore.Mvc;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace APIViaCep.Controllers
 {
@@ -16,7 +17,11 @@ namespace APIViaCep.Controllers
          {
                 if (ModelState.IsValid)
                 {
+
+                    if(loginModel.Login == "adm" && loginModel.Senha == "123")
+
                     return RedirectToAction("Index","Home");
+                    TempData["MessagemError"] = $"Usuario e/ou senha invalido(s). Por favor, tente novamente.";
                 }
                 return View("Index");
 
