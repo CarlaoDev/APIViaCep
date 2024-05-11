@@ -18,25 +18,25 @@
                 <span asp-validation-for="Nome" class="text-danger"></span>
 
                 <label asp-for="Cep" class="control-label"></label>
-                <input asp-for="Cep" class="form-control" id="Cep"/>
+                <input asp-for="Cep" class="form-control" id="cep"/>
 
                 <label asp-for="Logradouro" class="control-label"></label>
-                <input asp-for="Logradouro" class="form-control" id="Logradouro"/>
+                <input asp-for="Logradouro" class="form-control" id="rua"/>
 
                 <label asp-for="Complemento" class="control-label"></label>
-                <input asp-for="Complemento" class="form-control" id="Complemento"/>
+                <input asp-for="Complemento" class="form-control" id="complemento"/>
 
                 <label asp-for="Bairro" class="control-label"></label>
-                <input asp-for="Bairro" class="form-control" id="Bairro"/>
+                <input asp-for="Bairro" class="form-control" id="bairro"/>
 
                 <label asp-for="Cidade" class="control-label"></label>
-                <input asp-for="Cidade" class="form-control" id="Cidade"/>
+                <input asp-for="Cidade" class="form-control" id="cidade"/>
 
                 <label asp-for="Uf" class="control-label"></label>
-                <input asp-for="Uf" class="form-control" id="Uf"/>
+                <input asp-for="Uf" class="form-control" id="estado"/>
 
                 <label asp-for="Numero" class="control-label"></label>
-                <input asp-for="Numero" class="form-control" id="Numero"/>
+                <input asp-for="Numero" class="form-control" id="numero"/>
 
 
             </div>
@@ -51,7 +51,41 @@
     <a asp-action="Index">Back to List</a>
 </div>
 
-<script></script>
+<script>
+
+    document.getElementById('cep').addEventListener('input', async function () {
+        var cep = this.value; // Obtém o valor atual do campo de CEP
+
+        if (cep.length === 8) {
+            try {
+                const endereco = await consomeCep(cep);
+                document.getElementById('rua').value = endereco.logradouro;
+                document.getElementById('bairro').value = endereco.bairro;
+                document.getElementById('cidade').value = endereco.localidade;
+                document.getElementById('estado').value = endereco.uf;
+            } catch (error) {
+                console.error('Ocorreu um erro ao obter o endereço:', error);
+            }
+        }
+    });
+
+    async function consomeCep() {
+        try {
+            var cep = document.getElementById('cep').value;
+            const url = `https://viacep.com.br/ws/${cep}/json/`
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Erro ao obter dados do servidor.');
+            }
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error('Ocorreu um erro:', error);
+            throw error;
+        }
+    };
+
+</script>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
