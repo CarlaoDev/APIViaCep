@@ -18,7 +18,7 @@
                 <span asp-validation-for="Nome" class="text-danger"></span>
 
                 <label asp-for="Cep" class="control-label"></label>
-                <input asp-for="Cep" class="form-control" id="cep"/>
+                <input asp-for="Cep" class="form-control" id="cep" maxlength="9" />
 
                 <label asp-for="Logradouro" class="control-label"></label>
                 <input asp-for="Logradouro" class="form-control" id="rua"/>
@@ -55,8 +55,9 @@
 
     document.getElementById('cep').addEventListener('input', async function () {
         var cep = this.value; // Obtém o valor atual do campo de CEP
+        this.value = formatarCep(cep); // Aplica a máscara formatada
 
-        if (cep.length === 8) {
+        if (cep.length === 9) {
             try {
                 const endereco = await consomeCep(cep);
                 document.getElementById('rua').value = endereco.logradouro;
@@ -68,6 +69,12 @@
             }
         }
     });
+
+    function formatarCep(cep) {
+        cep = cep.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+        cep = cep.replace(/^(\d{5})(\d)/, '$1-$2'); // Adiciona o hífen após os primeiros 5 dígitos
+        return cep;
+    }
 
     async function consomeCep() {
         try {
